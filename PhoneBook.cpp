@@ -1,7 +1,35 @@
 #include <bits/stdc++.h>
 #include <fstream>
+#include<string>
+#include<windows.h>
 
 using namespace std;
+
+
+void start()
+{
+	system("Color 0A");
+	cout<<"\n\n\n\n\n\n\n\n";
+	cout<<"\t\t\t\t\tLOADING....";
+	char x = 219;
+	for(int i=0; i<35; i++)
+	{
+		cout<<x;
+		if(i<10)
+		{
+			Sleep(800);
+		}
+		if(i>=10 && i<20)
+		{
+			Sleep(50);
+		}
+		if(i>=10)
+		{
+			Sleep(25);
+		}
+	}
+	system("cls");
+}
 
 class encdec
 {
@@ -51,6 +79,56 @@ void encdec::decrypt()
 	fout.close();
 }
 
+void sercont()
+{
+	int count=0;
+	fstream file;
+	string name;
+	string arrow;
+	string namee;
+    string number;
+    string email;
+    string address;
+	cout<<"name: ";
+	
+    getline(cin,namee);
+	file.open("Contacts.txt",ios::in);    //ios::out - write ios::in - read
+	file >>name>>number>>email>>address;   //<<write //>>read
+	while(!file.eof())
+	{
+		if(namee==name)
+		{
+			cout<<name<<number<<email<<address;
+			count++;
+			break;
+		}
+		file>>name>>number>>email>>address;
+	}
+	file.close();
+	if(count==0)
+	cout<<"record not found";
+}
+
+void viewcont()
+{
+	
+	string line;
+	ifstream file("Contacts.txt");
+	if(file.is_open())
+	{
+		while(getline(file, line))
+		{
+			cout<<line<<'\n';
+		}
+		file.close();
+	}
+	else
+	{
+		cout<<"***** File can't open *****";
+	}
+	
+}
+
 void addcont()
 {
 	string name;
@@ -74,7 +152,7 @@ void addcont()
         cout << "Address : ";
         getline(cin, address);
     
-	    File << name <<" -> "<<number<<" -> "<<email<<" -> "<<address<<endl;
+	    File << name <<" "<<number<<" "<<email<<" "<<address<<endl;
         cout << "Add New Contact (y/n)? ";
         
 		getline(cin, quit);
@@ -84,17 +162,34 @@ void addcont()
 
 int main()
 {
+  start();
+  cout<<R"(
+                _____    __    __    ______   .__   __.  _______ .______     ______     ______    __  ___ 
+              |   _  \  |  |  |  |  /  __  \  |  \ |  | |   ____||   _  \   /  __  \   /  __  \  |  |/  / 
+              |  |_)  | |  |__|  | |  |  |  | |   \|  | |  |__   |  |_)  | |  |  |  | |  |  |  | |  '  /  
+              |   ___/  |   __   | |  |  |  | |  . `  | |   __|  |   _  <  |  |  |  | |  |  |  | |    <   
+              |  |      |  |  |  | |  `--'  | |  |\   | |  |____ |  |_)  | |  `--'  | |  `--'  | |  .  \  
+              | _|      |__|  |__|  \______/  |__| \__| |_______||______/   \______/   \______/  |__|\__\ 
+                                                                                                   
+                         .-----------------------------------------------------------------.
+                         | .-------------------------------------------------------------. |
+                         | |                                                             | |
+                         | |                                                             | | 
+                         | |          cout<<"1. Add contact: ";                          | |
+                         | |          cout<<"2. View All Contacts:";                     | |
+                         | |          cout<<"3. Search for contact:";                    | |
+                         | |          cout<<"4.  Delete Contact: ";                      | |
+                         | |          cout<<"5. Modify contact: ";                       | |
+                         | |          cout<<"6. Encrypt contacts file:";                 | |
+                         | |          cout<<"7. Decrypt contacts file";                  | |
+                         | |                                                             | |
+                         | |                                                             | |                            
+                         | |_____________________________________________________________| |
+                         |_________________________________________________________________|                                     
+)";
+    cout<<"Enter Your Choice : -> ";
     char c;
-  	cout << "**** PHONEBOOK ******" << endl;
-  	cout<<endl;
-    cout<<"1. Add contact: "<<endl;
-    cout<<"2. Delete contact: "<<endl;
-    cout<<"3. View all contacts: "<<endl;
-    cout<<"4. Search for contact: "<<endl;
-    cout<<"5. Modify contact: "<<endl;
-    cout<<"6. Encrypt contacts file"<<endl;
-    cout<<"7. Decrypt contacts file"<<endl;
-    cin>>c;
+	cin>>c;
     cin.ignore();
 	switch(c)
     {
@@ -103,17 +198,17 @@ int main()
     			addcont();
 				break;
             }
-       /* case '2':
+        case '2':
         	{
-        		delcont();
+        		viewcont();
         		break;
 			}
 		case '3':
 			{
-				viewcont();
+				sercont();
 				break;
 			}
-		case'4':
+		/*case'4':
 			{
 				sercont();
 				break;

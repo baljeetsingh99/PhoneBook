@@ -5,7 +5,35 @@
 
 using namespace std;
 
-
+class LoginManager
+{
+	private:
+        string passWord = "toor";
+        string userName = "root";
+        bool accessGranted;
+	public:
+		string userNameAttempt;
+        string passWordAttempt;
+	
+        void login()
+		{
+            cout <<"\t\t\t"<<" *-*-*-*-*-*-*-* LOGIN WINDOW *-*-*-*-*-*-*-* \n";
+            cout<<endl;
+			cout<<"\t\t\t USERNAME : ";
+			cin >> userNameAttempt;
+            if(userNameAttempt==userName)
+			{
+                cout << "\t\t\t PASSWORD : ";
+                cin >> passWordAttempt;
+                if(passWordAttempt==passWord)
+				{
+					cout<<endl;
+                    cout << "\t\t\t<<"<<" *-*-*-*-*-*-*-* YOU ARE LOGGED IN *-*-*-*-*-*-*-* \n";
+                }
+            }
+        }
+    
+};
 void start()
 {
 	system("Color 0A");
@@ -30,6 +58,26 @@ void start()
 	}
 	system("cls");
 }
+
+class detail
+{
+	private:
+		string fname;
+		string lname;
+        string number;
+        string email;
+        string address;
+    public:
+    	void add_contact();
+    	void view_contact();
+    	void search_contact();
+    	void delete_contact();
+    	
+		
+};
+bool check_digits(string);
+bool check_numbers(string);
+
 
 class encdec
 {
@@ -79,48 +127,85 @@ void encdec::decrypt()
 	fout.close();
 }
 
-void sercont()
+
+bool check_digits(string x)
 {
-	int count=0;
-	fstream file;
-	string name;
-	string arrow;
-	string namee;
-    string number;
-    string email;
-    string address;
-	cout<<"name: ";
-	
-    getline(cin,namee);
-	file.open("Contacts.txt",ios::in);    //ios::out - write ios::in - read
-	file >>name>>number>>email>>address;   //<<write //>>read
-	while(!file.eof())
+	if(x.length()==10)
 	{
-		if(namee==name)
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool check_numbers(string x)
+{
+	bool check=true;
+	
+	for(int i=0; i<x.length(); i++)
+	{
+		if(!(int(x[i]) >= 48 && int(x[i]) <= 57 ))
 		{
-			cout<<name<<number<<email<<address;
-			count++;
+			check = false;
 			break;
 		}
-		file>>name>>number>>email>>address;
 	}
-	file.close();
-	if(count==0)
-	cout<<"record not found";
+	if(check==true)
+	{
+		return true;
+	}
+	if(check==false)
+	{
+		return false;
+	}
 }
 
-void viewcont()
+void detail::delete_contact()
 {
 	
-	string line;
-	ifstream file("Contacts.txt");
-	if(file.is_open())
+}
+void detail::search_contact()
+{
+	bool found = false;
+	ifstream myfile("Contacts.txt");
+	string keyword;
+	cout<<"enter name : ";
+	cin>>keyword;
+	while(myfile >> fname >> lname >> email >> address >> number)
 	{
-		while(getline(file, line))
+		if(keyword == fname || keyword== lname)
 		{
-			cout<<line<<'\n';
+			system("cls");
+			
+			cout<<setw(20)<<"Name"<<setw(20)<<"LastName"<<setw(20)<<"email"<<setw(20)<<"Address"<<setw(20)<<"Number"<<setw(20)<<endl;
+			cout<<setw(20)<<fname<<setw(20)<<lname<<setw(20)<<email<<setw(20)<<address<<setw(20)<<number;
+			found = true;
+			break;
 		}
-		file.close();
+	}
+	if(found==false)
+	{
+		cout<<"no data found";
+	}
+}
+
+void detail::view_contact()
+{
+	Sleep(2000);
+	string line;
+	ifstream f;
+	f.open("Contacts.txt");
+	if(f.is_open())
+	{
+		
+		cout<<setw(10)<<"Name"<<" "<<"LastName"<<setw(15)<<"email"<<setw(15)<<"Address"<<setw(15)<<"Number"<<endl;
+		
+		while(getline(f, line))
+		{
+			cout<<setw(60)<<line<<endl;
+		}
+		f.close();
 	}
 	else
 	{
@@ -129,41 +214,56 @@ void viewcont()
 	
 }
 
-void addcont()
+
+void detail::add_contact()
 {
-	string name;
-    string number;
-    string email;
-    string address;
-	string quit = "y";
-	ofstream File;
-    File.open("Contacts.txt", ios::app);
-    while(quit!="n")
-	{
-		cout << "Full Name : ";
-        getline(cin, name);
-    
-        cout << "Mobile Number : ";
-        getline(cin, number);
+		ofstream f;
+        f.open("Contacts.txt", ios::app);
+	
+		cout << "First Name : ";
+        getline(cin,fname);
+        
+        cout<<"last name: ";
+        getline(cin,lname);
     
         cout << "E-mail : ";
-        getline(cin, email);
+        getline(cin,email);
     
         cout << "Address : ";
-        getline(cin, address);
-    
-	    File << name <<" "<<number<<" "<<email<<" "<<address<<endl;
-        cout << "Add New Contact (y/n)? ";
+        getline(cin,address);
         
-		getline(cin, quit);
-    }
-    File.close();
+		cout << "Mobile Number : ";
+        getline(cin,number);
+        
+        if(check_digits(number)==true)
+        {
+        	if(check_numbers(number)==true)
+        	{
+        		if(f.is_open())
+        		{
+        			 f<<setw(10)<<fname<<" "<<lname<<"\t"<<email<<setw(10)<<address<<setw(15)<<number<<endl;
+				}
+        	
+			}
+			else
+			{
+				cout<<"contain numbers only";
+			}
+		}
+		else
+		{
+			cout<<"write coreect number";
+		}
+       
+        f.close();
 }
 
 int main()
 {
-  start();
-  cout<<R"(
+	LoginManager log;
+	log.login();
+    start();
+    cout<<R"(
                 _____    __    __    ______   .__   __.  _______ .______     ______     ______    __  ___ 
               |   _  \  |  |  |  |  /  __  \  |  \ |  | |   ____||   _  \   /  __  \   /  __  \  |  |/  / 
               |  |_)  | |  |__|  | |  |  |  | |   \|  | |  |__   |  |_)  | |  |  |  | |  |  |  | |  '  /  
@@ -182,56 +282,73 @@ int main()
                          | |          cout<<"5. Modify contact: ";                       | |
                          | |          cout<<"6. Encrypt contacts file:";                 | |
                          | |          cout<<"7. Decrypt contacts file";                  | |
-                         | |                                                             | |
+                         | |          cout<<"8. exit";                                   | |
                          | |                                                             | |                            
                          | |_____________________________________________________________| |
                          |_________________________________________________________________|                                     
 )";
-    cout<<"Enter Your Choice : -> ";
-    char c;
-	cin>>c;
-    cin.ignore();
-	switch(c)
-    {
-    	case '1':
-    		{
-    			addcont();
-				break;
-            }
-        case '2':
-        	{
-        		viewcont();
-        		break;
-			}
-		case '3':
-			{
-				sercont();
-				break;
-			}
-		/*case'4':
-			{
-				sercont();
-				break;
-			}
-		case'5':
+    detail det;
+    encdec enc;
+	char c;
+	do
+	{
+		cout<<"\n";
+		cout<<"Enter Your Choice : -> ";
+		cin>>c;
+		cin.ignore();
+		switch(c)
+		{
+			case '1':
+				{
+					det.add_contact();
+				    break;
+                }
+            case '2':
+            	{
+        		    det.view_contact();
+        		    break;
+			    }
+		    case '3':
+			    {
+				    det.search_contact();
+				    break;
+			    }
+		  //  case'4':
+			    {
+			    	char n;
+			    	cin>>n;
+				    det.delete_contact();
+				    break;
+			    }
+		/*case'5':
 			{
 				modcont();
 				break
 			}*/
-		case'6':
-			{
-				encdec enc;
-				enc.encrypt();
-				break;
-			}
-		case'7':
-			{
-				encdec dec;
-				dec.decrypt();
-				break;
-				
-			}
-	}
-    
-  
+		    case'6':
+			    {
+				    enc.encrypt();
+				    break;
+			    }
+		    case'7':
+			    {
+				    enc.decrypt();
+				    break;
+			    }
+		    case'8':
+			    {
+				    return 0;
+				    exit(0);
+				    break;
+			    }
+		    default:
+			    {
+				    cout<<"Wrong Inpur!!";
+				    return 0;
+				    exit(0);
+			    }		    
+	   }
+	  
+   }
+    while(true);
 }

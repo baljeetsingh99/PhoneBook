@@ -10,14 +10,42 @@ class LoginManager
 	private:
         string passWord = "toor";
         string userName = "root";
-        bool accessGranted;
 	public:
 		string userNameAttempt;
         string passWordAttempt;
+        
+        void wrongcred()
+		{
+			LoginManager log;
+			cout<<" \t\t\t wrong credentials: \n";
+            cout<<" \t\t\t 1. retry\n";
+            cout<<" \t\t\t 2. exit\n";
+           	cout<<"\t\t\t -----> ";
+           	char a;
+			cin>>a;
+           	cin.ignore();
+           	switch(a)
+           	{
+           		case'1':
+				   {	
+            			log.login();
+				   }
+			    case'2':
+					{
+				        exit(0);
+					}
+				default:
+				    {
+						cout<<"\t\t\t Wrong Choice: Exiting...";
+						Sleep(1000);
+						exit(0);
+					}
+			}
+        }
 	
         void login()
 		{
-            cout <<"\t\t\t"<<" *-*-*-*-*-*-*-* LOGIN WINDOW *-*-*-*-*-*-*-* \n";
+            cout <<"\t\t\t *-*-*-*-*-* LOGIN WINDOW *-*-*-*-*-* \n";
             cout<<endl;
 			cout<<"\t\t\t USERNAME : ";
 			cin >> userNameAttempt;
@@ -28,17 +56,26 @@ class LoginManager
                 if(passWordAttempt==passWord)
 				{
 					cout<<endl;
-                    cout << "\t\t\t<<"<<" *-*-*-*-*-*-*-* YOU ARE LOGGED IN *-*-*-*-*-*-*-* \n";
+                    cout << "\t\t\t<< *-*-*-*-*-* YOU ARE LOGGED IN *-*-*-*-*-* \n";
                 }
+                else
+                {
+                	wrongcred();
+				}
             }
+            else
+            {
+            	wrongcred();
+			}
         }
     
 };
+
 void start()
 {
 	system("Color 0A");
 	cout<<"\n\n\n\n\n\n\n\n";
-	cout<<"\t\t\t\t\tLOADING....";
+	cout<<"\t\t\tPlease wait loading records....";
 	char x = 219;
 	for(int i=0; i<35; i++)
 	{
@@ -55,9 +92,12 @@ void start()
 		{
 			Sleep(25);
 		}
+	
 	}
 	system("cls");
 }
+
+
 
 class detail
 {
@@ -72,6 +112,7 @@ class detail
     	void view_contact();
     	void search_contact();
     	void delete_contact();
+    	void modify_conatct();
     	
 		
 };
@@ -163,6 +204,89 @@ bool check_numbers(string x)
 
 void detail::delete_contact()
 {
+	cout<<"Enter first name : ";
+	string nam;
+	cin>>nam;
+ 
+ 	fstream fle;
+	fle.open("Contacts.txt");
+
+	ofstream tmp;
+    tmp.open("temp.txt", ios::app);
+	
+	fle >> fname >> lname >> email >> address >> number;
+	
+	while(!fle.eof())
+	{
+		if(fname!=nam)
+		{
+			tmp <<fname<<" "<<lname<<"\t"<<email<<setw(10)<<address<<setw(15)<<number<<endl;
+		}
+		else
+		{
+			cout<<"\t\t\t\t    Searching ";
+			char x = 175;
+        	for(int i=0; i<25; i++)
+        	{
+        		cout<<x;
+			    if(i<10)
+		        {
+			        Sleep(800);
+		        }
+		        if(i>=10 && i<20)
+		        {
+			        Sleep(50);
+		        }
+		        if(i>=20)
+		        {
+			        Sleep(25);
+		        }
+		    }
+		    cout<<"\n \n";
+			cout<<"\t\t\t\t*-*-*-*-*-* Record Found *-*-*-*-*-*-*\n";
+			cout<<"\n";
+			
+				cout<<"\t\t\t\t\tDeleting...";
+	             x = 219;
+				for(int i=0; i<35; i++)
+				{
+					cout<<x;
+					if(i<10)
+					{
+						Sleep(800);
+		            }
+		            if(i>=10 && i<20)
+	             	if(i>=10)
+		            {
+			            Sleep(25);
+		            }
+	            }
+	           // system("cls");
+			  
+			cout<<"\n";
+			cout<<"\n\t\t\t\t*-*-*-*-*-* Record Deleted *-*-*-*-*-*\n";
+		}
+		fle >> fname >> lname >> email >> address >> number;
+	}
+	tmp.close();
+	fle.close();
+	
+	remove("Contacts.txt");
+	/*{
+		cout<<"file not removed";
+	}
+	else
+	{
+		cout<<"removed file";
+	}*/
+	rename("temp.txt","Contacts.txt");
+	/*{
+		cout<<"file not renmaed";
+	}
+	else
+	{
+		cout<<"renamed";
+	}*/
 	
 }
 void detail::search_contact()
@@ -241,7 +365,7 @@ void detail::add_contact()
         	{
         		if(f.is_open())
         		{
-        			 f<<setw(10)<<fname<<" "<<lname<<"\t"<<email<<setw(10)<<address<<setw(15)<<number<<endl;
+        			 f<<fname<<" "<<lname<<"\t"<<email<<setw(10)<<address<<setw(15)<<number<<endl;
 				}
         	
 			}
@@ -257,6 +381,11 @@ void detail::add_contact()
        
         f.close();
 }
+void detail::modify_conatct()
+{
+	//////////////////////////////////////////////////////////
+}
+
 
 int main()
 {
@@ -278,7 +407,7 @@ int main()
                          | |          cout<<"1. Add contact: ";                          | |
                          | |          cout<<"2. View All Contacts:";                     | |
                          | |          cout<<"3. Search for contact:";                    | |
-                         | |          cout<<"4.  Delete Contact: ";                      | |
+                         | |          cout<<"4. Delete Contact: ";                       | |
                          | |          cout<<"5. Modify contact: ";                       | |
                          | |          cout<<"6. Encrypt contacts file:";                 | |
                          | |          cout<<"7. Decrypt contacts file";                  | |
@@ -313,18 +442,17 @@ int main()
 				    det.search_contact();
 				    break;
 			    }
-		  //  case'4':
+		    case'4':
 			    {
-			    	char n;
-			    	cin>>n;
+			    	
 				    det.delete_contact();
 				    break;
 			    }
-		/*case'5':
+		case'5':
 			{
-				modcont();
-				break
-			}*/
+				det.modify_conatct();
+				break;
+			}
 		    case'6':
 			    {
 				    enc.encrypt();
@@ -343,7 +471,7 @@ int main()
 			    }
 		    default:
 			    {
-				    cout<<"Wrong Inpur!!";
+				    cout<<"Wrong Input!!";
 				    return 0;
 				    exit(0);
 			    }		    
